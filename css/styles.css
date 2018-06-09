@@ -1,3 +1,23 @@
+.cat {
+  margin-right: 50px;
+  float: left;
+}
+
 .image {
   max-width: 500px;
+}
+
+.admin-panel {
+  float: left;
+  width: 50%;
+}
+
+.admin-form {
+  display: none;
+  border: 1px solid black;
+  padding: 25px;
+}
+
+input {
+  width: 100%;
 }

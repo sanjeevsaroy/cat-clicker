@@ -3,7 +3,7 @@ $(function() {
     var cats = [
     {
       name: "George",
-      image: "https://images.pexels.com/photos/259803/pexels-photo-259803.jpeg?cs=srgb&dl=animal-pet-cute-259803.jpg&fm=jpg",
+      image: "https://images.pexels.com/photos/259803/pexels-photo-259803.jpeg",
       clicks: 0
     },
     {
@@ -26,19 +26,44 @@ $(function() {
 
   var view = {
     init: function() {
+      var nameInputField = $('.input-name');
+      var imageInputField = $('.input-image-url');
+      var clicksInputField = $('.input-clicks');
 
+      // Clicking a cat from the list
       $('body').on('click', '.cat-list-item', function() {
         var element = $(this);
         var index = element.attr('id');
         controller.setSelectedCat(index);
       });
 
+      // Clicking a cat image
       $('body').on('click', '.image', function() {
         var element = $(this);
         var index = element.attr('id');
         controller.incrementCatClicks();
       });
 
+      // Clicking the admin button
+      $('.admin-btn').click(function(){
+        $('.admin-form').toggle();
+      });
+
+      // Clicking the save button in the admin panel
+      $('.save-btn').click(function() {
+          var cat = {
+            name: nameInputField.val(),
+            image: imageInputField.val(),
+            clicks: clicksInputField.val()
+          }
+
+          controller.saveChanges(cat);
+      });
+
+      // Clicking the cancel button in the admin panel
+      $('.cancel-btn').click(function() {
+          controller.cancelChanges();
+      });
 
       this.render();
     },
@@ -53,6 +78,8 @@ $(function() {
       });
 
       var cat = controller.getSelectedCat();
+
+      // Cat section
       var name = $('.name');
       var image = $('.image');
       var counter = $('.click-counter');
@@ -60,6 +87,15 @@ $(function() {
       name.text(cat.name);
       image.attr('src', cat.image);
       counter.text(cat.clicks);
+
+      // Admin panel
+      var nameInputField = $('.input-name');
+      var imageInputField = $('.input-image-url');
+      var clicksInputField = $('.input-clicks');
+
+      nameInputField.val(cat.name);
+      imageInputField.val(cat.image);
+      clicksInputField.val(cat.clicks);
     }
   }
 
@@ -79,6 +115,7 @@ $(function() {
 
     setSelectedCat: function(index) {
       selectedCatIndex = index;
+
       view.render();
     },
 
@@ -86,8 +123,17 @@ $(function() {
       var cat = this.getSelectedCat();
       cat.clicks++;
 
-      var counter = $('.click-counter');
-      counter.text(cat.clicks);
+      view.render();
+    },
+
+    saveChanges: function(cat) {
+      cats[selectedCatIndex] = cat;
+      
+      view.render();
+    },
+
+    cancelChanges: function() {
+      view.render();
     }
   }
 
